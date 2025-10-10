@@ -1,2 +1,8 @@
-This is just an simple project which calculates a final grade in AITU. Hope it helps out yall stay goated, be #1 and so on. Peace.
-Created by Adilkhan.
+🎓 AITU Final Grade Calculator
+
+This is a simple yet handy project that helps you calculate your final grade at AITU with ease. Whether you’re double-checking your scores or just curious about your final results — this tool’s got your back.
+
+Stay sharp, stay goated, and keep aiming for #1! 💪
+
+Created with care by [Adilkhan](https://t.me/Adlkhy).
+Peace ✌️
