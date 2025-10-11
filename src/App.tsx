@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import Navbar from './components/Navbar';
 import Programming from './components/Programming';
+import English from './components/English';
+import Sociology from './components/Sociology';
 import PlaceholderCalculator from './components/Placeholder';
 import Footer from './components/Footer';
 
@@ -14,13 +16,13 @@ export default function App() {
       case "Programming":
         return <Programming />;
       case "Sociology":
-        return <PlaceholderCalculator subject="Sociology" />;
+        return <Sociology />;
       case "Discrete Math":
         return <PlaceholderCalculator subject="Discrete Math" />;
       case "Psychology":
         return <PlaceholderCalculator subject="Psychology" />;
       case "English":
-        return <PlaceholderCalculator subject="English" />;
+        return <English />;
       case "ICT":
         return <PlaceholderCalculator subject="ICT" />;
       default:
