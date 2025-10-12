@@ -79,7 +79,7 @@ function Programming() {
         {/* --- RESULTS DISPLAY --- */}
         <div className="bg-[#FFC29B] rounded-xl p-6 mb-8 shadow-lg border border-dark">
           <h2 className="text-lg font-medium text-dark text-center">
-            Your Calculated Final Grade
+            Your Calculated Final Grade < br/> (Orazova Arailym)
           </h2>
           <p className="text-6xl font-bold text-center text-[#B95E82] mt-2">
             {finalGrade.toFixed(2)}%
