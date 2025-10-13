@@ -330,7 +330,6 @@ body {
   box-sizing: border-box;
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
   transition: background-color 0.3s, color 0.3s;
 }
 
