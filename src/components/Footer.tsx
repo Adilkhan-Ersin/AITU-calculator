@@ -1,4 +1,4 @@
-import { Instagram, Send, Mail } from "lucide-react";
+// import { Instagram, Send, Mail } from "lucide-react";
 export default function Footer() {
   return (
     <footer className="text-foreground relative w-full p-4 sm:p-8 font-sans">
