@@ -9,13 +9,13 @@ interface GradeInputProps {
 // A reusable component for our input fields to keep the code clean
 const GradeInput = ({ label, value, onChange } : GradeInputProps) => (
   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
-    <label className="text-dark mb-1 sm:mb-0">{label}</label>
+    <label className="text-foreground mb-1 sm:mb-0">{label}</label>
     <input
       type="number"
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder="0-100"
-      className="w-full sm:w-32 bg-[#FEF3E2] text-dark p-2 rounded-md border border-dark focus:outline-none focus:ring-2 focus:ring-[#B95E82]"
+      className="w-full sm:w-32 bg-input text-accent-foreground p-2 rounded-md border border-foreground focus:outline-none focus:ring-1 focus:ring-ring"
     />
   </div>
 );
@@ -73,25 +73,25 @@ function Programming() {
 
   // --- JSX TO RENDER ---
   return (
-    <div className="bg-[#FFECC0] text-dark font-sans p-4 sm:p-8">
+    <div className="text-foreground font-sans px-4 pt-4 sm:px-8 sm:pt-8">
       <div className="max-w-4xl mx-auto">
 
         {/* --- RESULTS DISPLAY --- */}
-        <div className="bg-[#FFC29B] rounded-xl p-6 mb-8 shadow-lg border border-dark">
-          <h2 className="text-lg font-medium text-dark text-center">
+        <div className="bg-card rounded-xl p-6 mb-8 shadow-lg border border-foreground">
+          <h2 className="text-lg font-medium text-foreground text-center">
             Your Calculated Final Grade < br/> (Orazova Arailym)
           </h2>
-          <p className="text-6xl font-bold text-center text-[#B95E82] mt-2">
+          <p className="text-6xl font-bold text-center text-primary mt-2">
             {finalGrade.toFixed(2)}%
           </p>
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
             <div>
-                <p className="text-dark">1st Attestation Score</p>
-                <p className="text-2xl font-semibold text-[#B95E82]">{attestation1.toFixed(2)} / 100</p>
+                <p className="text-foreground">1st Attestation Score</p>
+                <p className="text-2xl font-semibold text-accent-foreground">{attestation1.toFixed(2)} / 100</p>
             </div>
             <div>
-                <p className="text-dark">2nd Attestation Score</p>
-                <p className="text-2xl font-semibold text-[#B95E82]">{attestation2.toFixed(2)} / 100</p>
+                <p className="text-foreground">2nd Attestation Score</p>
+                <p className="text-2xl font-semibold text-accent-foreground">{attestation2.toFixed(2)} / 100</p>
             </div>
           </div>
         </div>
@@ -99,32 +99,32 @@ function Programming() {
         {/* --- GRADE INPUTS --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* 1st Attestation Column */}
-            <div className="bg-[#FFC29B] p-5 rounded-lg border border-dark">
+            <div className="bg-card p-5 rounded-lg border border-foreground">
                 <h3 className="text-2xl font-bold mb-4 text-center">1st Attestation (30%)</h3>
-                <h4 className="font-semibold text-lg mb-2 text-dark">Assignments (60%)</h4>
+                <h4 className="font-semibold text-lg mb-2 text-foreground">Assignments (60%)</h4>
                 <GradeInput label="Assignment 1" value={assignment1} onChange={setAssignment1} />
                 <GradeInput label="Assignment 2" value={assignment2} onChange={setAssignment2} />
                 <GradeInput label="Assignment 3" value={assignment3} onChange={setAssignment3} />
-                <hr className="border-dark my-4" />
-                <h4 className="font-semibold text-lg mb-2 text-dark">Midterm (40%)</h4>
+                <hr className="border-foreground my-4" />
+                <h4 className="font-semibold text-lg mb-2 text-foreground">Midterm (40%)</h4>
                 <GradeInput label="Quiz (15pts)" value={midtermQuiz} onChange={setMidtermQuiz} />
                 <GradeInput label="Practical Exam (25pts)" value={midtermPractical} onChange={setMidtermPractical} />
             </div>
 
             {/* 2nd Attestation & Final Column */}
             <div>
-                <div className="bg-[#FFC29B] p-5 rounded-lg border border-dark mb-8">
+                <div className="bg-card p-5 rounded-lg border border-foreground mb-8">
                     <h3 className="text-2xl font-bold mb-4 text-center">2nd Attestation (30%)</h3>
-                    <h4 className="font-semibold text-lg mb-2 text-dark">Assignments (60%)</h4>
+                    <h4 className="font-semibold text-lg mb-2 text-foreground">Assignments (60%)</h4>
                     <GradeInput label="Assignment 4" value={assignment4} onChange={setAssignment4} />
                     <GradeInput label="Assignment 5" value={assignment5} onChange={setAssignment5} />
                     <GradeInput label="Assignment 6" value={assignment6} onChange={setAssignment6} />
-                    <hr className="border-dark my-4" />
-                    <h4 className="font-semibold text-lg mb-2 text-dark">Endterm (40%)</h4>
+                    <hr className="border-foreground my-4" />
+                    <h4 className="font-semibold text-lg mb-2 text-foreground">Endterm (40%)</h4>
                     <GradeInput label="Quiz (15pts)" value={endtermQuiz} onChange={setEndtermQuiz} />
                     <GradeInput label="Practical Exam (25pts)" value={endtermPractical} onChange={setEndtermPractical} />
                 </div>
-                <div className="bg-[#FFC29B] p-5 rounded-lg border border-dark">
+                <div className="bg-card p-5 rounded-lg border border-foreground">
                     <h3 className="text-2xl font-bold mb-4 text-center">Final Exam (40%)</h3>
                     <GradeInput label="MCQ Exam" value={finalExam} onChange={setFinalExam} />
                 </div>
