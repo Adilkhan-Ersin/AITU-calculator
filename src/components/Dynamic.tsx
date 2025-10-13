@@ -161,7 +161,7 @@ const GradeCategory = ({
         <Button
           size={'sm'}
           onClick={() => onRemoveCategory(category.id)}
-          className="bg-primary text-primary-foreground px-3 py-1 rounded-md w-full sm:w-36 text-sm"
+          className="mt-2 sm:mt-0 text-primary-foreground px-3 py-1 rounded-md w-full sm:w-36 text-sm"
         >
           Remove Category
         </Button>
@@ -318,7 +318,7 @@ export default function DynamicGradeCalculator() {
 
       {/* --- CATEGORY MANAGEMENT --- */}
       <div className="mb-6 flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-foreground">Course Categories</h2>
+        <h2 className="title-text2 text-2xl font-bold text-foreground">Course Categories</h2>
         <Button
           onClick={addCategory}
           className="bg-primary text-primary-foreground px-4 py-2 rounded-md transition-colors"
