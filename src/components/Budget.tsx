@@ -260,7 +260,7 @@ export default function BudgetPlanner() {
           Student Budget Planner
         </h2>
         <p className="text-xl text-center text-foreground mb-4">
-          Total Monthly Income: <span className="text-2xl font-bold text-primary">${totalIncome.toFixed(2)}</span>
+          Total Monthly Income: <span className="text-2xl font-bold text-primary">{totalIncome.toFixed(2)}₸</span>
         </p>
         
         {/* Income Sources Breakdown */}
@@ -272,7 +272,7 @@ export default function BudgetPlanner() {
               return amount > 0 ? (
                 <div key={source.id} className="flex flex-col justify-between text-sm">
                   <span>{source.name} ({source.type})</span>
-                  <span className="font-semibold text-accent-foreground">${amount.toFixed(2)}</span>
+                  <span className="font-semibold text-accent-foreground">{amount.toFixed(2)}₸</span>
                 </div>
               ) : null;
             })}

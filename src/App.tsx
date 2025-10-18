@@ -54,7 +54,7 @@ export default function App() {
             <p className="text-foreground bg-background my-2 rounded-xl p-3 shadow-lg border border-foreground max-w-[305px] md:max-w-3xl">
               <span className="">This grade calculator is based on the <strong>official syllabus</strong> and grading scheme, but please note that it may not be 
               <strong className='pl-1'>100% </strong>accurate. Teachers may occasionally adjust their grading policies or syllabus details. </span> <br />
-              Made by <a href="https://t.me/Adlkhy" target="_blank" rel="noopener noreferrer" className="text-primary">Adilkhan✨</a>.
+              <span className='custom-font text-2xl md:text-3xl'>Made by <a href="https://t.me/Adlkhy" target="_blank" rel="noopener noreferrer" className="text-primary">Adilkhan</a></span>
             </p>
           </header>
 

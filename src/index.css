@@ -163,7 +163,7 @@
   --shadow-2xl: 0px 4px 8px -2px hsl(0 0% 0% / 0.25);
 }
 
-.amber-light {
+.amber {
   --background: oklch(1.0000 0 0);
   --foreground: oklch(0.2686 0 0);
   --card: oklch(1.0000 0 0);
@@ -333,6 +333,20 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   transition: background-color 0.3s, color 0.3s;
+}
+
+@font-face {
+  font-family: 'Lucy';
+  src: url('./fonts/lucy.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.custom-font {
+  font-family: 'Lucy', sans-serif;
+  font-weight: normal;
+  font-style: normal;
 }
 
 @media (max-width: 400px) {
