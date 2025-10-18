@@ -22,7 +22,7 @@ export function ThemeProvider({
   useEffect(() => {
     const root = window.document.documentElement
 
-    root.classList.remove("light", "dark", "cyberpunk", "amber-light", "amber-dark")
+    root.classList.remove("light", "dark", "cyberpunk", "amber", "amethyst")
 
     if (theme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")

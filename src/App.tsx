@@ -7,13 +7,14 @@ import DiscreteMath from './components/DiscreateMath'
 import Psychology from './components/Psychology';
 import ICT from './components/ICT';
 import Dynamic from './components/Dynamic';
+import Budget from './components/Budget';
 import { ThemeProvider } from './components/theme-provider';
 import { ModeToggle } from './components/mode-toggle';
 // import PlaceholderCalculator from './components/Placeholder';
 import Footer from './components/Footer';
 
 export default function App() {
-  const subjects = ["Programming", "Sociology", "Discrete Math", "Psychology", "English", "ICT", "Dynamic"];
+  const subjects = ["Programming", "Sociology", "Discrete Math", "Psychology", "English", "ICT", "Dynamic", "Budget"];
   const [selectedSubject, setSelectedSubject] = useState(subjects[0]);
 
   const renderCalculator = () => {
@@ -32,6 +33,8 @@ export default function App() {
         return <ICT />;
       case "Dynamic":
         return <Dynamic />;
+      case "Budget":
+        return <Budget />;
       default:
         return <p>Please select a subject</p>;
     }

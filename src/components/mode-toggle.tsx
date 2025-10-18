@@ -38,7 +38,7 @@ export function ModeToggle() {
           
           {/* Amber themes icon */}
           <Flame className={`absolute h-[1.2rem] w-[1.2rem] transition-all ${
-            theme === "amber-light" || theme === "amber-dark" 
+            theme === "amber" || theme === "amethyst" 
               ? "scale-100 rotate-0" 
               : "scale-0 rotate-90"
           }`} />
@@ -56,11 +56,11 @@ export function ModeToggle() {
         <DropdownMenuItem onClick={() => setTheme("cyberpunk")}>
           Cyberpunk
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("amber-light")}>
-          Amber-light
+        <DropdownMenuItem onClick={() => setTheme("amber")}>
+          Amber
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("amber-dark")}>
-          Amber-dark
+        <DropdownMenuItem onClick={() => setTheme("amethyst")}>
+          Amethyst
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
           System
