@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @custom-variant dark (&:is(.dark *));
-
+/* Light Base Theme (Vercel Light) */
 :root {
   --background: oklch(0.9900 0 0);
   --foreground: oklch(0 0 0);
@@ -56,7 +56,7 @@
   --tracking-normal: 0em;
   --spacing: 0.25rem;
 }
-
+/* Dark Theme (Vercel Dark) */
 .dark {
   --background: oklch(0 0 0);
   --foreground: oklch(1 0 0);
@@ -109,7 +109,7 @@
   --shadow-xl: 0px 1px 2px 0px hsl(0 0% 0% / 0.18), 0px 8px 10px -1px hsl(0 0% 0% / 0.18);
   --shadow-2xl: 0px 1px 2px 0px hsl(0 0% 0% / 0.45);
 }
-
+/* Cyberpunk Theme */
 .cyberpunk {
   --background: oklch(0.1649 0.0352 281.8285);
   --foreground: oklch(0.9513 0.0074 260.7315);
@@ -162,7 +162,7 @@
   --shadow-xl: 0px 4px 8px -2px hsl(0 0% 0% / 0.10), 0px 8px 10px -3px hsl(0 0% 0% / 0.10);
   --shadow-2xl: 0px 4px 8px -2px hsl(0 0% 0% / 0.25);
 }
-
+/* Amber Theme */
 .amber {
   --background: oklch(1.0000 0 0);
   --foreground: oklch(0.2686 0 0);
@@ -217,7 +217,7 @@
   --tracking-normal: 0em;
   --spacing: 0.25rem;
 }
-
+/* Amethyst Theme (My favorite :) */
 .amethyst {
   --background: oklch(0.9777 0.0041 301.4256);
   --foreground: oklch(0.3651 0.0325 287.0807);
@@ -272,7 +272,7 @@
   --tracking-normal: 0em;
   --spacing: 0.25rem;
 }
-
+/* Theme Variables Mapping | Idk what it does but don't touch it if don't know either (it comes with the theme system) */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -325,7 +325,7 @@
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
 }
-
+/* Global Styles */
 body {
   margin: 0;
   padding: 0;
@@ -334,7 +334,7 @@ body {
   color: var(--foreground);
   transition: background-color 0.3s, color 0.3s;
 }
-
+/* Custom Font Face */
 @font-face {
   font-family: 'Lucy';
   src: url('./fonts/lucy.ttf') format('truetype');
@@ -356,5 +356,4 @@ body {
   .title-text2 {
     font-size: 17px !important;
   }
-
 }

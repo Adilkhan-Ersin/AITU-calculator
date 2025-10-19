@@ -13,10 +13,12 @@ import { ModeToggle } from './components/mode-toggle';
 // import PlaceholderCalculator from './components/Placeholder';
 import Footer from './components/Footer';
 
+// Start here if you gonna add new subject calculator
 export default function App() {
   const subjects = ["Programming", "Sociology", "Discrete Math", "Psychology", "English", "ICT", "Dynamic", "Budget"];
   const [selectedSubject, setSelectedSubject] = useState(subjects[0]);
-
+  
+  // Function to render the appropriate calculator based on selected subject
   const renderCalculator = () => {
     switch (selectedSubject) {
       case "Programming":
@@ -40,6 +42,7 @@ export default function App() {
     }
   };
   return (
+    // Wrap the app in ThemeProvider to enable theming
     <ThemeProvider defaultTheme='light' storageKey='vite-ui-theme'>
       <div className="text-foreground min-h-screen font-sans">
         <div className="max-w-4xl mx-auto p-4 sm:p-8">

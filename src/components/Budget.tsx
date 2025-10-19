@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import { X, House, Banana, Bus, Hospital, CreditCard, UtensilsCrossed, Gamepad2, ShoppingBag, Palette, Plane, Goal, User} from 'lucide-react';
+import { X, House, Banana, Bus, Hospital, CreditCard, UtensilsCrossed, Gamepad2, ShoppingBag, Palette, Plane, Goal, User} from 'lucide-react'; //icons from lucide https://lucide.dev/icons/
 import { Button } from '@/components/ui/button';
 // --- BUDGET TYPE DEFINITIONS ---
 interface IncomeSource {
@@ -23,7 +23,6 @@ interface BudgetRule {
 }
 
 // --- BUDGET COMPONENTS ---
-
 const IncomeSourceInput = ({ 
   source, 
   onUpdate, 
@@ -193,9 +192,9 @@ export default function BudgetPlanner() {
       wants: 30,
       savings: 20,
       colors: {
-        needs: '--chart-1', // red
-        wants: '--chart-2', // amber
-        savings: '--chart-3' // emerald
+        needs: '--chart-1',
+        wants: '--chart-2',
+        savings: '--chart-3'
       }
     },
     {
@@ -204,9 +203,9 @@ export default function BudgetPlanner() {
       wants: 20,
       savings: 20,
       colors: {
-        needs: '--chart-1', // red
-        wants: '--chart-2', // amber
-        savings: '--chart-3' // emerald
+        needs: '--chart-1',
+        wants: '--chart-2',
+        savings: '--chart-3'
       }
     },
     {
@@ -215,9 +214,9 @@ export default function BudgetPlanner() {
       wants: 20,
       savings: 10,
       colors: {
-        needs: '--chart-1', // red
-        wants: '--chart-2', // amber
-        savings: '--chart-3' // emerald
+        needs: '--chart-1',
+        wants: '--chart-2',
+        savings: '--chart-3'
       }
     }
   ];

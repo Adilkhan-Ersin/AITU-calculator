@@ -23,7 +23,6 @@ const GradeInput = ({ label, value, onChange } : GradeInputProps) => (
 // --- MAIN APP COMPONENT ---
 function Programming() {
   // --- STATE FOR ALL GRADE INPUTS ---
-  // Pre-filled with your known grades
   const [quiz, setQuiz] = useState('');
   const [classwork, setClasswork] = useState('');
   const [homework, setHomework] = useState('');
@@ -69,7 +68,6 @@ function Programming() {
     setAttestation2(calculatedAtt2);
 
     // --- Final Grade Calculation ---
-    // Formula: 0.3 * 1st Att + 0.3 * 2nd Att + 0.4 * Final
     const calculatedFinal = (calculatedAtt1 * 0.3) + (calculatedAtt2 * 0.3) + (p(finalExam) * 0.4);
     setFinalGrade(calculatedFinal);
 

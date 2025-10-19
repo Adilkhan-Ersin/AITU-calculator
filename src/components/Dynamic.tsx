@@ -17,7 +17,6 @@ interface Category {
 }
 
 // --- REUSABLE COMPONENTS ---
-
 // A dynamic input field for each grade item
 const GradeItemInput = ({ item, onUpdate, onRemove } : { 
   item: GradeItem; 
@@ -113,7 +112,7 @@ const GradeCategory = ({
       totalWeight: weight
     });
   };
-
+  {/* --- RENDER --- */}
   return (
     <div className="bg-card p-5 rounded-lg border border-foreground">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">

@@ -1,3 +1,4 @@
+// All subjects in the calculator
 export default function Navbar({ subjects, selectedSubject, onSelectSubject }: { subjects: string[], selectedSubject: string, onSelectSubject: (subject: string) => void }) {
   return (
     <nav className="flex justify-center items-center py-4 border-y-2 border-foreground border-dashed">

@@ -23,7 +23,6 @@ const GradeInput = ({ label, value, onChange } : GradeInputProps) => (
 // --- MAIN APP COMPONENT ---
 function Programming() {
   // --- STATE FOR ALL GRADE INPUTS ---
-  // Pre-filled with your known grades
   const [assignment1, setAssignment1] = useState('');
   const [assignment2, setAssignment2] = useState('');
   const [midtermQuiz, setMidtermQuiz] = useState('');
