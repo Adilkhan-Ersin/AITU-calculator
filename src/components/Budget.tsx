@@ -53,7 +53,7 @@ const IncomeSourceInput = ({
       <span className="text-foreground font-bold">₸</span>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button className="w-32 bg-accent text-foreground p-2 rounded-md ">
+          <Button className="w-32 bg-accent text-foreground hover:text-background p-2 rounded-md ">
             {source.type === 'grant' ? 'Grant' : 'Personal'}
           </Button>
         </DropdownMenuTrigger>
