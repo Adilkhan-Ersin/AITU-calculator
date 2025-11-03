@@ -12,12 +12,14 @@ import { Navbar08 } from './components/Navbar2';
 import Footer from './components/Footer';
 
 export default function App() {
-  const subjects = ["Programming", "Sociology", "Discrete Math", "Psychology", "English", "ICT", "Dynamic", "Budget"];
+  const subjects = ["Dynamic", "Programming", "Sociology", "Discrete Math", "Psychology", "English", "ICT", "Budget"];
   const [selectedSubject, setSelectedSubject] = useState(subjects[0]);
   
   // Function to render the appropriate calculator based on selected subject
   const renderCalculator = () => {
     switch (selectedSubject) {
+      case "Dynamic":
+        return <Dynamic />;
       case "Programming":
         return <Programming />;
       case "Sociology":
@@ -30,8 +32,6 @@ export default function App() {
         return <English />;
       case "ICT":
         return <ICT />;
-      case "Dynamic":
-        return <Dynamic />;
       case "Budget":
         return <Budget />;
       default:
