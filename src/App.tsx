@@ -59,7 +59,7 @@ export default function App() {
             </p>
           </header>
 
-          <main className="mt-4">
+          <main className="">
             {renderCalculator()}
           </main>
           <Footer />

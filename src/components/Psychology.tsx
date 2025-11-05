@@ -45,13 +45,13 @@ function Programming() {
     // Helper function to parse input strings to numbers, defaulting to 0
     const p = (val: string) => parseFloat(val) || 0;
 
-    // --- 1st Attestation Calculation ---
+    // --- RegMid Calculation ---
     const avgAssignments1 = (((p(independedStudy) + p(quiz)) / 100) * 4) + ((p(practice) / 100) * 14);
     const midtermScore = (p(midtermQuiz) / 100) * 8;
     const calculatedAtt1 = ((avgAssignments1) + (midtermScore)) * 100 / 30;
     setAttestation1(calculatedAtt1);
 
-    // --- 2nd Attestation Calculation ---
+    // --- RegEnd Calculation ---
     const avgAssignments2 = (((p(independedStudy2) + p(quiz2)) / 100) * 4) + ((p(practice2) / 100) * 14);
     const endtermScore = (p(endtermQuiz) / 100) * 8;
     const calculatedAtt2 = ((avgAssignments2) + (endtermScore)) * 100 / 30;
@@ -77,26 +77,26 @@ function Programming() {
           <h2 className="text-lg font-medium text-foreground text-center">
             Your Calculated Final Grade < br/> (Nursulu Belessova)
           </h2>
-          <p className="text-6xl font-bold text-center text-primary mt-2">
+          <p className="text-5xl font-bold text-center text-primary mt-2">
             {finalGrade.toFixed(2)}%
           </p>
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
+          <div className="mt-6 grid grid-cols-2 gap-4 text-center">
             <div>
-                <p className="text-foreground">1st Attestation Score</p>
-                <p className="text-2xl font-semibold text-accent-foreground">{attestation1.toFixed(2)} / 100</p>
+                <p className="text-foreground">RegMid Score</p>
+                <p className="text-xl font-semibold text-accent-foreground">{attestation1.toFixed(2)} / 100</p>
             </div>
             <div>
-                <p className="text-foreground">2nd Attestation Score</p>
-                <p className="text-2xl font-semibold text-accent-foreground">{attestation2.toFixed(2)} / 100</p>
+                <p className="text-foreground">RegEnd Score</p>
+                <p className="text-xl font-semibold text-accent-foreground">{attestation2.toFixed(2)} / 100</p>
             </div>
           </div>
         </div>
 
         {/* --- GRADE INPUTS --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* 1st Attestation Column */}
+            {/* RegMid Column */}
             <div className="bg-card p-5 rounded-lg border border-foreground">
-                <h3 className="text-2xl font-bold mb-4 text-center">1st Attestation (30%)</h3>
+                <h3 className="text-2xl font-bold mb-4 text-center">RegMid (30%)</h3>
                 <h4 className="font-semibold text-lg mb-2 text-foreground">Assignments (70%)</h4>
                 <GradeInput label="Learn" value={quiz} onChange={setQuiz} />
                 <GradeInput label="Independent Study" value={independedStudy} onChange={setIndependedStudy} />
@@ -106,10 +106,10 @@ function Programming() {
                 <GradeInput label="Quiz" value={midtermQuiz} onChange={setMidtermQuiz} />
             </div>
 
-            {/* 2nd Attestation & Final Column */}
+            {/* RegEnd & Final Column */}
             <div>
                 <div className="bg-card p-5 rounded-lg border border-foreground mb-8">
-                    <h3 className="text-2xl font-bold mb-4 text-center">2nd Attestation (30%)</h3>
+                    <h3 className="text-2xl font-bold mb-4 text-center">RegEnd (30%)</h3>
                     <h4 className="font-semibold text-lg mb-2 text-foreground">Assignments (70%)</h4>
                     <GradeInput label="Learn" value={quiz2} onChange={setQuiz2} />
                     <GradeInput label="Independent Study" value={independedStudy2} onChange={setIndependedStudy2} />

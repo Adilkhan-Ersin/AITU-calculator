@@ -47,13 +47,13 @@ function Programming() {
     // Helper function to parse input strings to numbers, defaulting to 0
     const p = (val: string) => parseFloat(val) || 0;
 
-    // --- 1st Attestation Calculation ---
+    // --- RegMid Calculation ---
     const avgAssignments1 = (p(assignment1) + p(assignment2) + p(assignment3)) / 3;
     const midtermScore = (((p(midtermQuiz) / 100) * 15) + ((p(midtermPractical) / 100) * 25)) / 40 * 100;
     const calculatedAtt1 = (avgAssignments1 * 0.6) + (midtermScore * 0.4);
     setAttestation1(calculatedAtt1);
 
-    // --- 2nd Attestation Calculation ---
+    // --- RegEnd Calculation ---
     const avgAssignments2 = (p(assignment4) + p(assignment5) + p(assignment6)) / 3;
     const endtermScore = (((p(endtermQuiz) / 100) * 15) + ((p(endtermPractical) / 100) * 25)) / 40 * 100;
     const calculatedAtt2 = (avgAssignments2 * 0.6) + (endtermScore * 0.4);
@@ -79,26 +79,26 @@ function Programming() {
           <h2 className="text-lg font-medium text-foreground text-center">
             Your Calculated Final Grade < br/> (Orazova Arailym)
           </h2>
-          <p className="text-6xl font-bold text-center text-primary mt-2">
+          <p className="text-5xl font-bold text-center text-primary mt-2">
             {finalGrade.toFixed(2)}%
           </p>
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
+          <div className="mt-6 grid grid-cols-2 gap-4 text-center">
             <div>
-                <p className="text-foreground">1st Attestation Score</p>
-                <p className="text-2xl font-semibold text-accent-foreground">{attestation1.toFixed(2)} / 100</p>
+                <p className="text-foreground">RegMid Score</p>
+                <p className="text-xl font-semibold text-accent-foreground">{attestation1.toFixed(2)} / 100</p>
             </div>
             <div>
-                <p className="text-foreground">2nd Attestation Score</p>
-                <p className="text-2xl font-semibold text-accent-foreground">{attestation2.toFixed(2)} / 100</p>
+                <p className="text-foreground">RegEnd Score</p>
+                <p className="text-xl font-semibold text-accent-foreground">{attestation2.toFixed(2)} / 100</p>
             </div>
           </div>
         </div>
 
         {/* --- GRADE INPUTS --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* 1st Attestation Column */}
+            {/* RegMid Column */}
             <div className="bg-card p-5 rounded-lg border border-foreground">
-                <h3 className="text-2xl font-bold mb-4 text-center">1st Attestation (30%)</h3>
+                <h3 className="text-2xl font-bold mb-4 text-center">RegMid (30%)</h3>
                 <h4 className="font-semibold text-lg mb-2 text-foreground">Assignments (60%)</h4>
                 <GradeInput label="Assignment 1" value={assignment1} onChange={setAssignment1} />
                 <GradeInput label="Assignment 2" value={assignment2} onChange={setAssignment2} />
@@ -109,10 +109,10 @@ function Programming() {
                 <GradeInput label="Practical Exam (25pts)" value={midtermPractical} onChange={setMidtermPractical} />
             </div>
 
-            {/* 2nd Attestation & Final Column */}
+            {/* RegEnd & Final Column */}
             <div>
                 <div className="bg-card p-5 rounded-lg border border-foreground mb-8">
-                    <h3 className="text-2xl font-bold mb-4 text-center">2nd Attestation (30%)</h3>
+                    <h3 className="text-2xl font-bold mb-4 text-center">RegEnd (30%)</h3>
                     <h4 className="font-semibold text-lg mb-2 text-foreground">Assignments (60%)</h4>
                     <GradeInput label="Assignment 4" value={assignment4} onChange={setAssignment4} />
                     <GradeInput label="Assignment 5" value={assignment5} onChange={setAssignment5} />

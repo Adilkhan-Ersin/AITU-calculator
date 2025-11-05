@@ -14,8 +14,8 @@ export default function Footer() {
           <li>Тотал меньше 70 — минус стипендия</li>
           <li>Тотал меньше 50 — летник</li>
           <li>Регтерм меньше 50 — летник</li>
-          <li>РегМид (1st Attestation Score) меньше 25 — летник</li>
-          <li>РегЭнд (2nd Attestation Score) меньше 25 — летник</li>
+          <li>РегМид меньше 25 — летник</li>
+          <li>РегЭнд меньше 25 — летник</li>
         </ul>
         <h3 className="font-bold text-foreground text-sm sm:text-base mb-1">При обнаружении списывания — <span className="text-primary">ОТЧИСЛЕНИЕ.</span></h3>
       </div>

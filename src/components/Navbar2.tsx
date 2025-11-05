@@ -538,7 +538,7 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
-                      className="group h-8 w-8 hover:bg-accent hover:text-accent-foreground"
+                      className="group hover:bg-accent hover:text-accent-foreground"
                       variant="outline"
                       size="icon"
                     >

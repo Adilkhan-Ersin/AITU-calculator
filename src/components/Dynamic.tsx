@@ -286,7 +286,7 @@ export default function DynamicGradeCalculator() {
         <h2 className="text-lg font-medium text-foreground text-center">
           Your Calculated Final Grade
         </h2>
-        <p className="text-6xl font-bold text-center text-primary mt-2">
+        <p className="text-5xl font-bold text-center text-primary mt-2">
           {finalGrade.toFixed(2)}%
         </p>
         
@@ -295,7 +295,7 @@ export default function DynamicGradeCalculator() {
           <p className="text-foreground">
             Total Weight: {totalWeightPercentage}%
             {totalWeightPercentage !== 100 && (
-              <span className="text-primary ml-2">
+              <span className="text-destructive ml-2"><br />
                 (Should be 100% - currently {totalWeightPercentage > 100 ? 'over' : 'under'})
               </span>
             )}
