@@ -1,4 +1,4 @@
-import { Moon, Sun, Zap, Flame } from "lucide-react" //icons
+import { Moon, Sun, Zap, Flame, TreePine } from "lucide-react" //icons
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -35,6 +35,13 @@ export function ModeToggle() {
               ? "scale-100 rotate-0" 
               : "scale-0 rotate-90"
           }`} />
+
+          {/* Nature theme icon */}
+          <TreePine className={`absolute h-[1.2rem] w-[1.2rem] transition-all ${
+            theme === "nature" 
+              ? "scale-100 rotate-0" 
+              : "scale-0 rotate-90"
+          }`} />
           
           {/* Amber themes icon */}
           <Flame className={`absolute h-[1.2rem] w-[1.2rem] transition-all ${
@@ -55,6 +62,9 @@ export function ModeToggle() {
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("cyberpunk")}>
           Cyberpunk
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("nature")}>
+          Nature
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("amber")}>
           Amber
