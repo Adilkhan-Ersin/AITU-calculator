@@ -3,6 +3,8 @@ import * as React from 'react';
 import { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { ModeToggle } from '@/components/mode-toggle';
+import { useTheme } from "@/lib/useTheme"
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -174,6 +176,7 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
     const [isMobile, setIsMobile] = useState(false);
     const containerRef = useRef<HTMLElement>(null);
 
+    const { theme } = useTheme()
     // const theme = useContext(ThemeProviderContext)?.theme ?? 'light';
 
     useEffect(() => {
@@ -276,10 +279,9 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
                     {logo}
                   </div>
                   <span className="font-bold text-xl sm:inline-block hidden">Evalis</span>
-                  {/* {ThemeProviderContext.useContext().theme === 'light' ?
+                  {theme === 'dark' || theme === 'cyberpunk' || theme === 'system' ?
                   <img src="/white.png" alt="logo" className="h-6 ms-2 hidden md:inline" /> : <img src="/dark.png" alt="logo" className="h-6 ms-2 hidden md:inline" />
-                  } */}
-                  <img src="/dark.png" alt="logo" className="h-6 ms-2 hidden md:inline" />
+                  }
                   
                 </button>
               </div>
