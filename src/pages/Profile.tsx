@@ -10,7 +10,7 @@ export default function Profile() {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate('/login');
+      navigate('/login', { replace: true });
     }
   }, [user, loading, navigate]);
 

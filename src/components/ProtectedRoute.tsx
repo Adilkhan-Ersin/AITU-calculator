@@ -12,18 +12,14 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate('/login');
+      navigate('/login', { replace: true }); 
     }
   }, [user, loading, navigate]);
 
+  // 1. Show Loader while checking session
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="loader triangle">
-          <svg viewBox="0 0 86 80">
-            <polygon points="43 8 79 72 7 72"></polygon>
-          </svg>
-        </div>
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
           <p className="mt-4 text-foreground">Loading...</p>
@@ -32,9 +28,11 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     );
   }
 
+  // 2. Double check: If loading is done and still no user, render nothing 
   if (!user) {
     return null; 
   }
 
+  // 3. User is confirmed, render the page
   return <>{children}</>;
 }

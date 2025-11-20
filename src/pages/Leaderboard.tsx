@@ -29,7 +29,7 @@ export const leaderboardSchema = z.object({
 export type LeaderboardItem = z.infer<typeof leaderboardSchema>;
 
 export default function Leaderboard() {
-  const { user: currentUser } = useUser()
+  const { user: currentUser, loading} = useUser()
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
@@ -125,8 +125,8 @@ export default function Leaderboard() {
 
   useEffect(() => {
     // Redirect if not authenticated
-    if (!currentUser) {
-      navigate('/login');
+    if (!loading && !currentUser) {
+      navigate('/login', { replace: true });
       return;
     }
 
@@ -154,7 +154,7 @@ export default function Leaderboard() {
     return () => {
       subscription.unsubscribe();
     };
-  }, [currentUser, fetchLeaderboardData, navigate]);
+  }, [currentUser, loading, fetchLeaderboardData, navigate]);
 
   // Enhanced: Get current user's rank and stats
   const currentUserRank = leaderboardData.find(item => item.isCurrentUser)?.id || 0;
