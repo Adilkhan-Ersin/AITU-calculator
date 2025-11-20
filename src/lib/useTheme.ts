@@ -1,8 +1,6 @@
-// src/hooks/useTheme.ts
-
 import { useContext } from "react"
-// ✅ Import the context from your new central context file
-import { ThemeProviderContext } from "@/lib/theme-context" // Adjust path as needed
+
+import { ThemeProviderContext } from "@/lib/theme-context" 
 
 export const useTheme = () => {
   const context = useContext(ThemeProviderContext)

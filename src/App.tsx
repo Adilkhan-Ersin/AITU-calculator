@@ -1,87 +1,55 @@
-import { useState } from 'react';
-import Programming from './components/Programming';
-import English from './components/English';
-import Sociology from './components/Sociology';
-import DiscreteMath from './components/DiscreateMath'
-import Psychology from './components/Psychology';
-import ICT from './components/ICT';
-import Dynamic from './components/Dynamic';
-import Budget from './components/Budget';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './components/theme-provider';
-import { Navbar08 } from './components/Navbar2';
-import Footer from './components/Footer';
+import MainCalculator from './pages/CalculatorApp'; // We'll create this
+import Login from './components/Login';
+import AuthCallback from './pages/AuthCallback';
+import Leaderboard from './pages/Leaderboard';
+import NotFoundPage from './components/NotFoundPage';
+import Profile from './pages/Profile';
+import ProtectedRoute from './components/ProtectedRoute';
+import { useEffect } from 'react';
+import { useUser } from './hooks/useUser';
+import FinalGrades from './pages/FinalGrades';
+import TermOfService from './pages/TermOfService';
 
-export default function App() {
-  const subjects = ["Dynamic", "Programming", "Sociology", "Discrete Math", "Psychology", "English", "ICT", "Budget"];
-  const [selectedSubject, setSelectedSubject] = useState(subjects[0]);
-  
-  // Function to render the appropriate calculator based on selected subject
-  const renderCalculator = () => {
-    switch (selectedSubject) {
-      case "Dynamic":
-        return <Dynamic />;
-      case "Programming":
-        return <Programming />;
-      case "Sociology":
-        return <Sociology />;
-      case "Discrete Math":
-        return <DiscreteMath />;
-      case "Psychology":
-        return <Psychology />;
-      case "English":
-        return <English />;
-      case "ICT":
-        return <ICT />;
-      case "Budget":
-        return <Budget />;
-      default:
-        return <p>Please select a subject</p>;
-    }
-  };
+function App() {
+  const { user, loading, session } = useUser();
 
+  useEffect(() => {
+    console.log('App - User state:', { 
+      user: user?.email, 
+      loading, 
+      hasSession: !!session 
+    });
+  }, [user, loading, session]);
   return (
     <ThemeProvider defaultTheme='light' storageKey='vite-ui-theme'>
-      <Navbar08 
-        subjects={subjects}
-        selectedSubject={selectedSubject}
-        onSelectSubject={setSelectedSubject}
-      />
-      <div className="text-foreground min-h-screen font-sans">
-        <div className="max-w-4xl mx-auto p-4 sm:p-8">
-          <header className="text-center flex flex-col items-center">
-            {selectedSubject !== "Budget" && (
-              <h1 className="title-text mb-1 text-4xl sm:text-5xl font-bold text-foreground">
-                Final Grade Calculator
-              </h1>
-            )}
-            {selectedSubject === "Budget" && (
-              <h1 className="title-text mb-1 text-4xl sm:text-5xl font-bold text-foreground">
-                Budget Calculator
-              </h1>
-            )}
-            {selectedSubject !== "Budget" && selectedSubject !== "Dynamic" && (
-              <div>
-                <p className="font-semibold md:text-xl mb-2 max-w-[300px] md:max-w-[700px]">🎓 Select a subject to calculate your grade in real-time.</p>
-                <p className="text-foreground bg-background my-2 rounded-xl p-3 shadow-lg border border-foreground max-w-[305px] md:max-w-3xl">
-                  <span className="">This grade calculator is based on the <strong>official syllabus</strong> and grading scheme, but please note that it may not be 
-                  <strong className='pl-1'>100% </strong>accurate. Teachers may occasionally adjust their grading policies or syllabus details. </span> <br />
-                </p>
-              </div>
-            )}
-            {selectedSubject === "Budget" && (
-              <p className="font-semibold md:text-xl mb-2 max-w-[300px] md:max-w-[700px]">💵 Calculate your budget in real-time.</p>
-            )}
-            {selectedSubject === "Dynamic" && (
-              <p className="font-semibold md:text-xl mb-2 max-w-[300px] md:max-w-[700px]">Create your own calculator using syllabus.</p>
-            )}
-          </header>
-
-          <main className="">
-            {renderCalculator()}
-          </main>
-          <Footer />
-        </div>
-      </div>
+      <Router>
+        <Routes>
+          <Route path="/" element={<MainCalculator />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/term-of-service" element={<TermOfService />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/leaderboard" element={
+            <ProtectedRoute>
+              <Leaderboard />
+            </ProtectedRoute>} 
+            />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>} 
+            />
+          <Route path="/final-grades" element={
+            <ProtectedRoute>
+              <FinalGrades />
+            </ProtectedRoute>} 
+            />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Router>
     </ThemeProvider>
   );
 }
+
+export default App;

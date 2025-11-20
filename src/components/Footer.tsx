@@ -20,7 +20,7 @@ export default function Footer() {
         <h3 className="font-bold text-foreground text-sm sm:text-base mb-1">При обнаружении списывания — <span className="text-primary">ОТЧИСЛЕНИЕ.</span></h3>
       </div>
       <p className="text-center text-foreground text-sm mt-4">
-        &copy; 2025. All rights couldn't be reserved. Made by <a href="https://t.me/Adlkhy" target="_blank" rel="noopener noreferrer" className="text-primary">Adilkhan.</a>
+        &copy; 2025. All rights <span className="cursor-pointer" onClick={() => window.location.href = '/term-of-service'}>reserved.</span> Made by <a href="https://t.me/Adlkhy" target="_blank" rel="noopener noreferrer" className="text-primary">Adilkhan.</a>
       </p>
     </footer>
   );

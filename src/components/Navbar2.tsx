@@ -4,6 +4,9 @@ import { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { ModeToggle } from '@/components/mode-toggle';
 import { useTheme } from "@/lib/useTheme"
+import { useUser } from '@/hooks/useUser';
+import { supabase } from '@/lib/supabaseClient';
+import { useNavigate } from 'react-router-dom';
 
 import {
   DropdownMenu,
@@ -21,7 +24,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-// import { ThemeProviderContext } from '@/lib/theme-context';
+
 // Simple logo component for the navbar
 const Logo = (props: React.SVGAttributes<SVGElement>) => {
   return (
@@ -47,6 +50,7 @@ const Logo = (props: React.SVGAttributes<SVGElement>) => {
     </svg>
   );
 };
+
 // Hamburger icon component
 const HamburgerIcon = ({ className, ...props }: React.SVGAttributes<SVGElement>) => (
   <svg
@@ -76,57 +80,117 @@ const HamburgerIcon = ({ className, ...props }: React.SVGAttributes<SVGElement>)
     />
   </svg>
 );
-// User Menu Component
+
+// User Menu Component - UPDATED WITH AUTH
 const UserMenu = ({
-  userName = 'Mark Zuckerberg',
-  userEmail = 'dih@example.com',
-  userAvatar,
   onItemClick
 }: {
-  userName?: string;
-  userEmail?: string;
-  userAvatar?: string;
   onItemClick?: (item: string) => void;
-}) => (
-  <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <Button variant="ghost" className="h-9 px-2 py-0 hover:bg-accent hover:text-accent-foreground">
+}) => {
+  const { user, loading } = useUser();
+  const navigate = useNavigate();
+
+  const handleItemClick = (item: string) => {
+    if (item === 'logout') {
+      supabase.auth.signOut();
+      navigate('/', { replace: true });
+    } else if (item === 'profile') {
+      navigate('/profile', { replace: true });
+    } else if (item === 'leaderboard') {
+      navigate('/leaderboard', { replace: true });
+    }  else if (item === 'final-grades') {
+      navigate('/final-grades', { replace: true });
+    } else {
+      onItemClick?.(item);
+    }
+  };
+
+  // Get user display info
+  const getUserName = () => {
+    // if (profile?.full_name) return profile.full_name;
+    if (user?.user_metadata?.full_name) return user.user_metadata.full_name;
+    if (user?.user_metadata?.user_name) return user.user_metadata.user_name;
+    return user?.email?.split('@')[0] || 'User';
+  };
+
+  const getUserEmail = () => {
+    return user?.email || 'No email';
+  };
+
+  // const getAvatarFallback = () => {
+  //   return getUserName()
+  //     .split(' ')
+  //     .map((n) => n[0])
+  //     .join('')
+  //     .toUpperCase()
+  //     .slice(0, 2);
+  // };
+  if (!user) {
+    return (
+      <Button 
+        variant="ghost" 
+        className="h-9 px-4"
+        onClick={() => navigate('/login')}
+      >
+        Login
+      </Button>
+    );
+  }
+  
+  if (loading) {
+    return (
+      <Button variant="ghost" className="h-9 px-2 py-0" disabled>
         <Avatar className="h-7 w-7">
-          <AvatarImage src={userAvatar} alt={userName} />
-          <AvatarFallback className="text-xs">
-            {userName.split(' ').map(n => n[0]).join('')}
-          </AvatarFallback>
+          <AvatarFallback className="text-xs">...</AvatarFallback>
         </Avatar>
         <ChevronDownIcon className="h-3 w-3 ml-1" />
-        <span className="sr-only">User menu</span>
       </Button>
-    </DropdownMenuTrigger>
-    <DropdownMenuContent align="end" className="w-56">
-      <DropdownMenuLabel>
-        <div className="flex flex-col space-y-1">
-          <p className="text-sm font-medium leading-none">{userName}</p>
-          <p className="text-xs leading-none text-muted-foreground">
-            {userEmail}
-          </p>
-        </div>
-      </DropdownMenuLabel>
-      <DropdownMenuSeparator />
-      <DropdownMenuItem onClick={() => onItemClick?.('profile')}>
-        Profile
-      </DropdownMenuItem>
-      <DropdownMenuItem onClick={() => onItemClick?.('settings')}>
-        Grades
-      </DropdownMenuItem>
-      <DropdownMenuItem onClick={() => onItemClick?.('billing')}>
-        Leaderboard
-      </DropdownMenuItem>
-      <DropdownMenuSeparator />
-      <DropdownMenuItem onClick={() => onItemClick?.('logout')}>
-        Log out
-      </DropdownMenuItem>
-    </DropdownMenuContent>
-  </DropdownMenu>
-);
+    );
+  }
+
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-9 px-2 py-0 hover:bg-accent hover:text-accent-foreground">
+          <Avatar className="h-7 w-7">
+            <AvatarImage src={user.user_metadata?.avatar_url} alt={getUserName()} />
+            <AvatarFallback className="text-xs">
+            </AvatarFallback>
+          </Avatar>
+          <ChevronDownIcon className="h-3 w-3 ml-1" />
+          <span className="sr-only">User menu</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel>
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium leading-none">{getUserName()}</p>
+            <p className="text-xs leading-none text-muted-foreground">
+              {getUserEmail()}
+            </p>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => handleItemClick('profile')}>
+          Profile
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleItemClick('final-grades')}>
+          Final Grades
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleItemClick('leaderboard')}>
+          Leaderboard
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => handleItemClick('logout')}>
+          Log out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+
 // Types
 export interface Navbar08NavItem {
   href?: string;
@@ -159,15 +223,11 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
     {
       className,
       logo = <Logo />,
-      logoHref = 'https://youtu.be/dQw4w9WgXcQ?si=WbdTCDXYRFWdRgOx',
-      userName = 'Tralaleo Tralala',
-      userEmail = 'dih@example.com',
-      userAvatar,
+      // REMOVED DEFAULT USER PROPS SINCE WE'RE USING REAL AUTH
       // NEW SUBJECT PROPS
       subjects = [],
       selectedSubject = '',
       onSelectSubject,
-      // onNavItemClick,
       onUserItemClick,
       ...props
     },
@@ -175,9 +235,7 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
   ) => {
     const [isMobile, setIsMobile] = useState(false);
     const containerRef = useRef<HTMLElement>(null);
-
-    const { theme } = useTheme()
-    // const theme = useContext(ThemeProviderContext)?.theme ?? 'light';
+    const { theme } = useTheme();
 
     useEffect(() => {
       const checkWidth = () => {
@@ -204,6 +262,9 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
         ref.current = node;
       }
     }, [ref]);
+    const logoHome = useNavigate();
+    const navigate = useNavigate();
+    const { user, loading } = useUser();
 
     return (
       <header
@@ -232,47 +293,29 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent align="start" className="w-80 p-2">
-                    {/* <NavigationMenu className="max-w-none"> */}
-                      <nav className="grid grid-cols-2 gap-2">
-                        {subjects.map((subject) => (
-                          <li key={subject} className='list-none mx-5'>
-                          <button
-                            onClick={() => onSelectSubject?.(subject)}
-                            className={`text-sm font-semibold transition-colors ${
-                              selectedSubject === subject 
-                                ? 'text-accent' 
-                                : 'text-accent-foreground'
-                            }`}
-                          >
-                          {subject}
-                          </button>
-                          </li>
-                        ))}
-                        {/* {navigationLinks.map((link, index) => (
-                          <NavigationMenuItem key={index} className="w-full">
-                            <button
-                              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                                e.preventDefault();
-                                if (onNavItemClick && link.href) onNavItemClick(link.href);
-                              }}
-                              className={cn(
-                                'flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer no-underline',
-                                link.active && 'bg-accent text-accent-foreground'
-                              )}
-                            >
-                              {link.label}
-                            </button>
-                          </NavigationMenuItem>
-                        ))} */}
-                      </nav>
-                    {/* </NavigationMenu> */}
+                    <nav className="grid grid-cols-2 gap-2">
+                      {subjects.map((subject) => (
+                        <li key={subject} className='list-none mx-5'>
+                        <button
+                          onClick={() => onSelectSubject?.(subject)}
+                          className={`text-sm font-semibold transition-colors ${
+                            selectedSubject === subject 
+                              ? 'text-accent' 
+                              : 'text-accent-foreground'
+                          }`}
+                        >
+                        {subject}
+                        </button>
+                        </li>
+                      ))}
+                    </nav>
                   </PopoverContent>
                 </Popover>
               )}
               {/* Logo */}
               <div className="flex items-center">
                 <button
-                  onClick={logoHref ? () => window.open(logoHref, '_blank') : undefined}
+                  onClick={() => logoHome('/')}
                   className="flex items-center space-x-2 text-primary hover:text-primary/90 transition-colors cursor-pointer"
                 >
                   <div className="text-2xl">
@@ -289,14 +332,16 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
 
             {/* Right side - Theme toggle */}
             <div className="flex flex-1 items-center justify-end gap-2">
-              {/* User menu */}
+              {/* User menu - UPDATED */}
               <ModeToggle />
-              <UserMenu 
-                userName={userName}
-                userEmail={userEmail}
-                userAvatar={userAvatar}
-                onItemClick={onUserItemClick}
-              />
+              {!user || !loading || (
+                <Button 
+                  variant="ghost" 
+                  className="h-9 px-4"
+                  onClick={() => navigate('/login')}
+                >Login
+                </Button>)}
+              <UserMenu onItemClick={onUserItemClick} />
             </div>
           </div>
 
@@ -325,26 +370,6 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
               </nav>
             </div>
           )}
-          {/* <div className="border-t py-4">
-            <nav className="flex justify-center items-center">
-              <ul className="flex flex-wrap gap-2 sm:gap-x-4 justify-center">
-                {subjects.map((subject) => (
-                  <li key={subject}>
-                    <button
-                      onClick={() => onSelectSubject?.(subject)}
-                      className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-foreground md:text-sm text-xs font-semibold transition-colors ${
-                        selectedSubject === subject 
-                          ? 'bg-secondary text-primary' 
-                          : 'bg-background text-accent-foreground hover:bg-card'
-                      }`}
-                    >
-                      {subject}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div> */}
         </div>
       </header>
     );

@@ -171,7 +171,6 @@ const BudgetRuleDisplay = ({
   );
 };
 
-// --- BUDGET SECTION COMPONENT ---
 export default function BudgetPlanner() {
   const [incomeSources, setIncomeSources] = useState<IncomeSource[]>([
     {
@@ -253,7 +252,6 @@ export default function BudgetPlanner() {
 
   return (
     <div className="px-4 pt-4 sm:px-8 sm:pt-8">
-      {/* --- BUDGET HEADER --- */}
       <div className="bg-card rounded-xl p-6 mb-8 shadow-lg border border-foreground">
         <h2 className="text-2xl font-medium text-center text-foreground mb-2">
           Student Budget Planner
@@ -262,7 +260,6 @@ export default function BudgetPlanner() {
           Total Monthly Income: <span className="text-2xl font-bold text-primary">{totalIncome.toFixed(2)}₸</span>
         </p>
         
-        {/* Income Sources Breakdown */}
         <div className="mt-4">
           <h3 className="font-semibold text-foreground mb-2">Income Breakdown:</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -279,7 +276,6 @@ export default function BudgetPlanner() {
         </div>
       </div>
 
-      {/* --- INCOME INPUT SECTION --- */}
       <div className="bg-card p-6 rounded-lg border border-foreground mb-8">
         <h3 className="text-2xl font-bold mb-4 text-center">Income Sources</h3>
         <p className="text-center text-foreground mb-4">
@@ -305,7 +301,6 @@ export default function BudgetPlanner() {
         </Button>
       </div>
 
-      {/* --- BUDGET RULES DISPLAY --- */}
       <div className="mb-8">
         <h3 className="text-2xl font-bold text-center mb-6">Recommended Budget Plans</h3>
         <div className="grid grid-cols-1 gap-6">
@@ -319,7 +314,6 @@ export default function BudgetPlanner() {
         </div>
       </div>
 
-      {/* --- BUDGET GUIDELINES --- */}
       <div className="bg-card rounded-lg p-4 border border-foreground">
         <h3 className="text-xl font-bold text-foreground mb-3">Budget Categories Guide</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
