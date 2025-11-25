@@ -163,6 +163,26 @@ export default function FinalGrades() {
     return (sum / grades.length).toFixed(1);
   };
 
+  const calculateGPA = () => {
+    const grades = Object.values(savedGrades);
+    if (grades.length === 0) return null;
+    const gpaPoints = grades.map(grade => {
+      if (grade >= 95) return 4.0;
+      if (grade >= 90) return 3.67;
+      if (grade >= 85) return 3.33;
+      if (grade >= 80) return 3.0;
+      if (grade >= 75) return 2.67;
+      if (grade >= 70) return 2.33;
+      if (grade >= 65) return 2.0;
+      if (grade >= 60) return 1.67;
+      if (grade >= 55) return 1.33;
+      if (grade >= 50) return 1.0;
+      return 0.0;
+    });
+    const sum = gpaPoints.reduce((total: number, point) => total + point, 0);
+    return (sum / gpaPoints.length).toFixed(2);
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -191,10 +211,17 @@ export default function FinalGrades() {
             </p>
 
             {averageGrade && (
+              <div>
               <div className="mt-4 inline-flex items-center gap-2 bg-accent px-4 py-2 rounded-lg shadow">
                 <span className="font-semibold text-foreground">
                   Current Average: {averageGrade}%
                 </span>
+              </div>
+              <div className="ml-4 mt-4 inline-flex items-center gap-2 bg-accent px-4 py-2 rounded-lg shadow">
+                <span className="font-semibold text-foreground">
+                  Your GPA: {calculateGPA()}
+                </span>
+              </div>
               </div>
             )}
           </div>
