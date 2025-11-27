@@ -102,12 +102,12 @@ import {
 // eslint-disable-next-line react-refresh/only-export-components
 export const schema = z.object({
   id: z.number(),
-  header: z.string(),
-  type: z.string(),
-  status: z.string(),
-  target: z.string(),
+  name: z.string(),
+  group: z.string(),
+  performance: z.string(),
+  subjects: z.string(),
   limit: z.string(),
-  reviewer: z.string(),
+  grade: z.string(),
 })
 
 const columns: ColumnDef<z.infer<typeof schema>>[] = [
@@ -133,33 +133,33 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     },
   },
   {
-    accessorKey: "header",
+    accessorKey: "name",
     header: "Student Name",
     enableHiding: false,
     cell: ({ row }) => {
       return (
         <div className="font-medium">
-          {row.original.header}
+          {row.original.name}
         </div>
       );
     },
   },
   {
-    accessorKey: "type",
+    accessorKey: "group",
     header: "Group",
     cell: ({ row }) => (
       <div className="w-32">
         <Badge variant="outline" className="text-muted-foreground px-1.5">
-          {row.original.type}
+          {row.original.group}
         </Badge>
       </div>
     ),
   },
   {
-    accessorKey: "status",
+    accessorKey: "performance",
     header: "Performance",
     cell: ({ row }) => {
-      const status = row.original.status;
+      const status = row.original.performance;
       let badgeVariant: "default" | "secondary" | "outline" = "secondary";
       let icon = null;
       
@@ -185,19 +185,19 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     },
   },
   {
-    accessorKey: "target",
+    accessorKey: "subjects",
     header: "Subjects",
     cell: ({ row }) => (
       <div className="text-sm text-muted-foreground">
-        {row.original.target}
+        {row.original.subjects}
       </div>
     ),
   },
   {
-    accessorKey: "reviewer",
+    accessorKey: "grade",
     header: "Average Grade",
     cell: ({ row }) => {
-      const grade = parseFloat(row.original.reviewer);
+      const grade = parseFloat(row.original.grade);
       let gradeColor = "text-gray-600";
       
       if (grade >= 90) gradeColor = "text-green-600 font-semibold";
@@ -207,7 +207,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
       
       return (
         <div className={`text-lg font-mono ${gradeColor}`}>
-          {row.original.reviewer}
+          {row.original.grade}
         </div>
       );
     },

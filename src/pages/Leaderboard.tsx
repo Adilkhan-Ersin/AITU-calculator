@@ -17,12 +17,12 @@ import {
 // eslint-disable-next-line react-refresh/only-export-components
 export const leaderboardSchema = z.object({
   id: z.number(),
-  header: z.string(), // This will be the user's name
-  type: z.string(),   // This will be the group/class
-  status: z.string(), // This will be the performance level
-  target: z.string(), // This will be the number of subjects
+  name: z.string(), // This will be the user's name
+  group: z.string(),   // This will be the group/class
+  performance: z.string(), // This will be the performance level
+  subjects: z.string(), // This will be the number of subjects
   limit: z.string(),  // This will be the semester
-  reviewer: z.string(), // This will be the average grade
+  grade: z.string(), // This will be the average grade
   isCurrentUser: z.boolean().optional(), // Enhanced feature: highlight current user
 });
 
@@ -70,7 +70,7 @@ export default function Leaderboard() {
           userAverages[userId] = {
             total: 0,
             count: 0,
-            full_name: profile?.full_name || 'Anonymous',
+            full_name: profile?.full_name || 'NPC'+userId.slice(0, 5),
             avatar_url: profile?.avatar_url || '',
             user_id: userId
           };
@@ -95,19 +95,19 @@ export default function Leaderboard() {
 
           return {
             id: 0, // Temporary ID, will be set after sorting
-            header: userData.full_name,
-            type: 'None', // You can make this dynamic
-            status: status,
-            target: `${userData.count} subjects`, // Number of subjects completed
+            name: userData.full_name,
+            group: 'None', // You can make this dynamic
+            performance: status,
+            subjects: `${userData.count} subjects`, // Number of subjects completed
             limit: 'Fall 2025',
-            reviewer: `${average.toFixed(1)}%`, // Average grade
+            grade: `${average.toFixed(1)}%`, // Average grade
             isCurrentUser: isCurrentUser
           };
         })
         .sort((a, b) => {
           // Sort by average grade (descending)
-          const aGrade = parseFloat(a.reviewer);
-          const bGrade = parseFloat(b.reviewer);
+          const aGrade = parseFloat(a.grade);
+          const bGrade = parseFloat(b.grade);
           return bGrade - aGrade;
         })
         .map((item, index) => ({
@@ -158,7 +158,7 @@ export default function Leaderboard() {
 
   // Enhanced: Get current user's rank and stats
   const currentUserRank = leaderboardData.find(item => item.isCurrentUser)?.id || 0;
-  const currentUserAverage = leaderboardData.find(item => item.isCurrentUser)?.reviewer || '0%';
+  const currentUserAverage = leaderboardData.find(item => item.isCurrentUser)?.grade || '0%';
 
   if (isLoading) {
     return (
