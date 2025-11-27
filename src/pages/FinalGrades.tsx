@@ -1,6 +1,6 @@
+import { supabase } from '@/lib/supabaseClient';
 import { useState, useEffect } from 'react';
 import { useUser } from '@/hooks/useUser';
-import { supabase } from '@/lib/supabaseClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -219,7 +219,7 @@ export default function FinalGrades() {
               </div>
               <div className="ml-4 mt-4 inline-flex items-center gap-2 bg-accent px-4 py-2 rounded-lg shadow">
                 <span className="font-semibold text-foreground">
-                  Your GPA: {calculateGPA()}
+                  Average GPA: {calculateGPA()}
                 </span>
               </div>
               </div>
@@ -232,7 +232,7 @@ export default function FinalGrades() {
                 <CardTitle className="text-xl flex items-center justify-center">
                   <span>Disclaimer</span>
                 </CardTitle>
-                <CardDescription className="text-md">
+                <CardDescription className="text-md md:text-lg text-foreground text-center">
                   Hello, you wonderful, capable person.
                   This little project is built on a fragile, beautiful thing: <span className='font-semibold'>trust.</span> We believe that you are here to challenge yourself and share in a community of learners. We believe that you value your integrity more than a temporary spot on a digital list.
                   This website doesn't have advanced anti-cheat algorithms. It has something far more powerful: it has <span className='font-semibold'>faith in you.</span>. Faith that you understand the point wasn't just the grade, but the <span className='font-semibold'>journey.</span> That you know honest 75 is worth infinitely more than a dishonest 95.

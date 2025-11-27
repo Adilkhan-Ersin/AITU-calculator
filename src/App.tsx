@@ -18,7 +18,7 @@ function App() {
   useEffect(() => {
     console.log('App - User state:', { 
       user: user?.email, 
-      loading, 
+      loading: loading,
       hasSession: !!session 
     });
   }, [user, loading, session]);

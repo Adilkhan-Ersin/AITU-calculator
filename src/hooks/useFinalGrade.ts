@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
+import { useState, useEffect } from 'react';
 import { useUser } from '@/hooks/useUser';
 
 export function useFinalGrade(subject: string) {

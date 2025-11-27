@@ -1,91 +1,157 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import type { User, Session } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabaseClient';
 import { UserContext } from '@/hooks/useUser';
+import LoadingPage from '@/pages/LoadingPage';
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<unknown | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  // Keep loading as true initially
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
+  const [profileLoading, setProfileLoading] = useState(false);
+  useEffect(() => {
+    if (profileLoading) {
+      console.debug('Profile is loading...');
+    }
+  }, [profileLoading]);
 
-  // --- Profile Fetch Function (Unchanged, but important for finally block) ---
+  // Prevent race conditions
+  const mountedRef = useRef(true);
+  const fetchProfileTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const fetchProfile = async (userId: string) => {
+    // Clear any existing timeout
+    if (fetchProfileTimeoutRef.current) {
+      clearTimeout(fetchProfileTimeoutRef.current);
+    }
+
+    setProfileLoading(true);
+    
+    // Set a timeout to prevent infinite loading
+    fetchProfileTimeoutRef.current = setTimeout(() => {
+      console.warn('Profile fetch timeout - continuing anyway');
+      if (mountedRef.current) {
+        setProfileLoading(false);
+      }
+    }, 5000); // 5 second timeout
+
     try {
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
         .single();
-      
-      if (!error && data) {
+
+      // Clear timeout on successful fetch
+      if (fetchProfileTimeoutRef.current) {
+        clearTimeout(fetchProfileTimeoutRef.current);
+      }
+
+      if (error) {
+        console.error('Error fetching profile:', error);
+        if (mountedRef.current) {
+          setProfile(null);
+        }
+        return;
+      }
+
+      if (data && mountedRef.current) {
         setProfile(data);
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
-    } 
-    // NOTE: We rely on the caller (getInitialSession) to set setLoading(false)
-    // for the initial load, NOT the finally block here, to avoid race conditions.
+      if (mountedRef.current) {
+        setProfile(null);
+      }
+    } finally {
+      // Clear timeout
+      if (fetchProfileTimeoutRef.current) {
+        clearTimeout(fetchProfileTimeoutRef.current);
+      }
+      if (mountedRef.current) {
+        setProfileLoading(false);
+      }
+    }
   };
 
-
   useEffect(() => {
-    // 1. Function to handle the initial session and profile load
-    const initializeAuth = async () => {
-      // Step A: Get the initial session from storage
-      const { data: { session: initialSession } } = await supabase.auth.getSession();
-      
-      setSession(initialSession);
-      const initialUser = initialSession?.user ?? null;
-      setUser(initialUser);
+    mountedRef.current = true;
 
-      // Step B: If a user exists, fetch their profile
-      if (initialUser) {
-        await fetchProfile(initialUser.id);
+    const initializeAuth = async () => {
+      try {
+        console.log('Initializing auth...');
+        
+        const { data: { session: initialSession }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Error getting session:', error);
+        }
+
+        if (!mountedRef.current) return;
+
+        console.log('Initial session:', initialSession?.user?.email || 'No user');
+        
+        setSession(initialSession);
+        const initialUser = initialSession?.user ?? null;
+        setUser(initialUser);
+
+        // CRITICAL: Set loading to false IMMEDIATELY after getting auth state
+        // Don't wait for profile fetch
+        setLoading(false);
+
+        // Fetch profile in background (non-blocking)
+        if (initialUser) {
+          fetchProfile(initialUser.id);
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+        if (mountedRef.current) {
+          setSession(null);
+          setUser(null);
+          setProfile(null);
+          setLoading(false);
+        }
       }
-      
-      // Step C: THIS IS THE CRITICAL LINE.
-      // We set loading to false ONLY after the initial session check AND 
-      // the profile fetch (if necessary) are complete.
-      setLoading(false); 
     };
-    
+
     initializeAuth();
 
-    // 2. Set up the real-time listener for subsequent changes (login, logout, etc.)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, currentSession) => {
         console.log('Auth state changed:', event, currentSession?.user?.email);
         
-        // This listener updates state, but DOES NOT set setLoading(false).
-        // It's already been set to false by initializeAuth.
+        if (!mountedRef.current) return;
+
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
-        
+
+        // CRITICAL: Set loading to false immediately
+        setLoading(false);
+
+        // Handle profile fetch based on auth state
         if (currentSession?.user) {
-          // You must await fetchProfile here to ensure profile is loaded before redirecting/accessing
-          await fetchProfile(currentSession.user.id); 
+          // Fetch profile in background (non-blocking)
+          fetchProfile(currentSession.user.id);
         } else {
           setProfile(null);
+          setProfileLoading(false);
         }
       }
     );
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mountedRef.current = false;
+      if (fetchProfileTimeoutRef.current) {
+        clearTimeout(fetchProfileTimeoutRef.current);
+      }
+      subscription.unsubscribe();
+    };
   }, []);
-
-  // Removed setLoading(false) from fetchProfile's finally block:
-  // Now, fetchProfile is only called from initializeAuth for the initial load,
-  // which guarantees setLoading(false) runs last. For subsequent state changes 
-  // (via onAuthStateChange), we don't want to re-trigger the main loading state.
 
   return (
     <UserContext.Provider value={{ user, profile, loading, session }}>
-      {/* The component consuming this context should check 'loading':
-        {loading ? <LoadingScreen /> : <AppRoutes />} 
-      */}
-      {children}
+      {loading ? <LoadingPage /> : children}
     </UserContext.Provider>
   );
 };

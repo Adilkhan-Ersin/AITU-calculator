@@ -1,10 +1,16 @@
 import { createClient } from '@supabase/supabase-js';
-import { SUPABASE_ANON_KEY, SUPABASE_URL } from '../config';
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    persistSession: true, 
+    persistSession: true,
     autoRefreshToken: true,
-    detectSessionInUrl: true
-  }
+    detectSessionInUrl: true,
+    // Important for Vercel deployments
+    storageKey: 'supabase.auth.token',
+    storage: window.localStorage,
+  },
+
 });

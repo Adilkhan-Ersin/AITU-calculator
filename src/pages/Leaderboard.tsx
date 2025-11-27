@@ -1,11 +1,11 @@
+import { supabase } from '@/lib/supabaseClient'
 import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 // import type { User } from '@supabase/supabase-js'
-import { supabase } from '@/lib/supabaseClient'
 import { useUser } from '@/hooks/useUser'
 import { DataTable } from '@/components/data-table'
 import { AppSidebar } from "@/components/app-sidebar"
-import { ChartAreaInteractive } from "@/components/chart-area-interactive"
+// import { ChartAreaInteractive } from "@/components/chart-area-interactive"
 import { SectionCards } from "@/components/section-cards"
 import { SiteHeader } from "@/components/site-header"
 import { z } from 'zod';
@@ -176,7 +176,7 @@ export default function Leaderboard() {
           <div className="min-h-screen flex items-center justify-center">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-              <p className="mt-4 text-foreground">Loading leaderboard... breath slowly and deeply</p>
+              <p className="mt-4 text-foreground">Loading leaderboard... let's see where you at</p>
             </div>
           </div>
         </SidebarInset>
@@ -233,9 +233,9 @@ export default function Leaderboard() {
 
               <SectionCards />
               
-              <div className="px-4 lg:px-6">
+              {/* <div className="px-4 lg:px-6">
                 <ChartAreaInteractive />
-              </div>
+              </div> */}
               
               {/* Enhanced DataTable with real-time data */}
               <DataTable data={leaderboardData} />
