@@ -300,8 +300,8 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
                           onClick={() => onSelectSubject?.(subject)}
                           className={`text-sm font-semibold transition-colors ${
                             selectedSubject === subject 
-                              ? 'text-accent' 
-                              : 'text-accent-foreground'
+                              ? 'text-primary underline underline-offset-4 decoration-2' 
+                              : 'text-foreground'
                           }`}
                         >
                         {subject}

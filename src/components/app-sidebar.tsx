@@ -106,7 +106,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <div onClick={() => navigate("/", { replace: true })}>
               <span className="text-base font-semibold">Evalis</span>
               {theme === 'dark' || theme === 'cyberpunk' || theme === 'system' ?
-                <img src="/white.png" alt="logo" className="h-6 ms-2 hidden md:inline" /> : <img src="/dark.png" alt="logo" className="h-6 ms-2 hidden md:inline" />
+                <img src="/white.png" alt="logo" className="h-6 ms-2" /> : <img src="/dark.png" alt="logo" className="h-6 ms-2" />
               }</div>
             </SidebarMenuButton>
           </SidebarMenuItem>
