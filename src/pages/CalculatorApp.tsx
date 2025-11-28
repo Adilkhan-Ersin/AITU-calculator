@@ -66,7 +66,7 @@ export default function MainCalculator() {
               </h1>
             )}
             {selectedSubject !== "Budget" && selectedSubject !== "Dynamic" && selectedSubject !== "Attendance" && (
-              <div>
+              <div className='px-4 sm:px-8'>
                 <p className="font-semibold md:text-xl mb-2 max-w-4xl">
                   🎓 Select a subject to calculate your grade in real-time.
                 </p>

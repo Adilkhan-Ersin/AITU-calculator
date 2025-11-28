@@ -85,10 +85,10 @@ export default function Leaderboard() {
           const average = userData.total / userData.count;
           
           // Determine performance level based on average
-          let status = 'Prostoi';
-          if (average >= 90) status = 'Povishnik';
-          else if (average >= 70) status = 'Stependia';
-          else if (average < 50) status = 'Letnik';
+          let status = 'At Risk';
+          if (average >= 90) status = 'Nerd';
+          else if (average >= 70) status = 'Survivor';
+          else if (average < 50) status = 'RIP';
 
           // Enhanced: Check if this is the current user
           const isCurrentUser = currentUser?.id === userData.user_id;
