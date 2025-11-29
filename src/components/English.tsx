@@ -70,7 +70,7 @@ function Programming() {
       <div className="max-w-4xl mx-auto">
 
         {/* --- RESULTS DISPLAY --- */}
-        <div className="bg-card rounded-xl p-6 mb-8 shadow-lg border border-foreground">
+        <div className="bg-card rounded-lg p-6 mb-8 shadow-lg border border-foreground">
           <h2 className="text-lg font-medium text-foreground text-center">
             Your Calculated Final Grade < br/>(B1-, Rakisheva Tolkyn)
           </h2>

@@ -65,7 +65,8 @@ export default function MainCalculator() {
         <div className="max-w-4xl mx-auto p-4 sm:p-8">
           <header className="text-center flex flex-col items-center">
             {selectedSubject !== "Budget" &&
-              selectedSubject !== "Attendance" && (
+              selectedSubject !== "Attendance" &&
+                selectedSubject !== "GPA" && (
                 <h1 className="title-text mb-1 text-4xl sm:text-5xl font-bold text-foreground">
                   Final Grade Calculator
                 </h1>
@@ -80,10 +81,16 @@ export default function MainCalculator() {
                 Attendance Tracker
               </h1>
             )}
+            {selectedSubject === "GPA" && (
+              <h1 className="title-text mb-1 text-4xl sm:text-5xl font-bold text-foreground">
+                GPA Calculator
+              </h1>
+            )}
             {selectedSubject !== "Budget" &&
               selectedSubject !== "Dynamic" &&
-              selectedSubject !== "Attendance" && (
-                <div>
+              selectedSubject !== "Attendance" && 
+              selectedSubject !== "GPA" && (
+                <div className="px-4 sm:px-8">
                   <p className="font-semibold md:text-xl mb-2 max-w-4xl">
                     🎓 Select a subject to calculate your grade in real-time.
                   </p>
@@ -96,13 +103,18 @@ export default function MainCalculator() {
                 </div>
               )}
             {selectedSubject === "Budget" && (
-              <p className="font-semibold md:text-xl mb-2 max-w-4xl">
+              <p className="font-semibold md:text-xl max-w-4xl">
                 💵 Calculate your budget in real-time.
               </p>
             )}
             {selectedSubject === "Attendance" && (
-              <p className="font-semibold md:text-xl mb-2 max-w-4xl">
+              <p className="font-semibold md:text-xl max-w-4xl">
                 📅 Track your attendance in real-time.
+              </p>
+            )}
+            {selectedSubject === "GPA" && (
+              <p className="font-semibold md:text-xl max-w-4xl">
+                🎓 Calculate your GPA in real-time.
               </p>
             )}
             {selectedSubject === "Dynamic" && (

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
+import { Input } from './ui/input';
 import { X } from 'lucide-react';
+
 // --- TYPE DEFINITIONS ---
 interface GradeItem {
   id: string;
@@ -17,63 +19,13 @@ interface Category {
 }
 
 // --- REUSABLE COMPONENTS ---
-// A dynamic input field for each grade item
-const GradeItemInput = ({ item, onUpdate, onRemove } : { 
-  item: GradeItem; 
-  onUpdate: (id: string, field: string, value: string) => void; 
-  onRemove: (id: string) => void;
-}) => (
-  <div className="flex flex-col sm:flex-row items-center gap-4 mb-3">
-    <input
-      type="text"
-      value={item.name}
-      onChange={(e) => onUpdate(item.id, 'name', e.target.value)}
-      placeholder="Item Name (e.g., Quiz 1)"
-      className="w-full flex-grow bg-input text-foreground p-2 rounded-md border border-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-    />
-    <div className='flex w-full gap-2'>
-      <div className="flex items-center gap-2">
-        <input
-          type="number"
-          value={item.score}
-          onChange={(e) => onUpdate(item.id, 'score', e.target.value)}
-          placeholder="Score %"
-          min="0"
-          max="100"
-          className="w-20 sm:w-24 bg-input text-accent-foreground p-2 rounded-md border border-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-        />
-        <span className="text-foreground font-bold">%</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <input
-          type="number"
-          value={item.weight}
-          onChange={(e) => onUpdate(item.id, 'weight', e.target.value)}
-          placeholder="Weight"
-          min="0"
-          step="0.1"
-          className="w-20 sm:w-24 bg-input text-accent-foreground p-2 rounded-md border border-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-        />
-        <span className="text-foreground font-bold">points</span>
-      </div>
-    </div>
-    <Button
-      size={'icon'}
-      onClick={() => onRemove(item.id)}
-      className="w-full sm:w-10 flex items-center bg-card-foreground justify-center"
-      aria-label="Remove Item"
-    ><X className='text-card' />
-    </Button>
-  </div>
-);
 
-// A reusable section for each category (Mid Term, End Term, etc.)
-const GradeCategory = ({ 
-  category, 
-  onUpdateCategory, 
-  onRemoveCategory 
-} : { 
-  category: Category; 
+const GradeCategory = ({
+  category,
+  onUpdateCategory,
+  onRemoveCategory
+}: {
+  category: Category;
   onUpdateCategory: (id: string, updatedCategory: Category) => void;
   onRemoveCategory: (id: string) => void;
 }) => {
@@ -93,7 +45,7 @@ const GradeCategory = ({
   const updateItem = (id: string, field: string, value: string) => {
     onUpdateCategory(category.id, {
       ...category,
-      items: category.items.map(it => 
+      items: category.items.map(it =>
         it.id === id ? { ...it, [field]: value } : it
       )
     });
@@ -112,61 +64,238 @@ const GradeCategory = ({
       totalWeight: weight
     });
   };
-  {/* --- RENDER --- */}
+
+  // Calculate category score
+  const calculateCategoryScore = () => {
+    const p = (val: string) => parseFloat(val) || 0;
+    let totalWeightedScore = 0;
+    let totalCategoryWeight = 0;
+
+    category.items.forEach(item => {
+      const score = p(item.score);
+      const weight = p(item.weight);
+      if (weight > 0) {
+        totalWeightedScore += (score / 100) * weight;
+        totalCategoryWeight += weight;
+      }
+    });
+
+    return totalCategoryWeight > 0 ? (totalWeightedScore / totalCategoryWeight) * 100 : 0;
+  };
+
+  const categoryScore = calculateCategoryScore();
+
   return (
-    <div className="bg-card p-5 rounded-lg border border-foreground">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
-        <input
+    <div className="bg-card rounded-lg mb-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+        <Input
           type="text"
+          placeholder="Category Name"
           value={category.name}
           onChange={(e) => onUpdateCategory(category.id, {
             ...category,
             name: e.target.value
           })}
-          className="text-lg sm:text-2xl font-bold bg-transparent border-b border-foreground focus:outline-none"
+          className="w-full text-lg font-bold p-2"
         />
-        <div className="flex w-full items-center gap-2">
-          <input
+        <div className="flex items-center gap-2">
+          <Input
             type="number"
             value={category.totalWeight}
             onChange={(e) => updateCategoryWeight(Number(e.target.value))}
             min="0"
             max="100"
-            className="w-20 bg-input text-accent-foreground p-2 rounded-md border border-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+            className="w-20 bg-input text-foreground p-2 border border-foreground"
           />
-          <span className="text-foreground font-bold">% of final grade</span>
+          <span className="text-foreground w-36 font-bold">% of final grade</span>
         </div>
       </div>
-      
-      <div className="space-y-3">
+
+      {/* DESKTOP TABLE */}
+      <div className="hidden sm:block overflow-x-auto mb-4">
+        <table className="w-full border-spacing-x-2 table-auto border-collapse text-sm">
+          <thead>
+            <tr className="text-left text-foreground/80">
+              <th className="py-2">Item Name</th>
+              <th className="py-2">Score (%)</th>
+              <th className="py-2">Weight</th>
+              <th className="py-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {category.items.map(item => (
+              <tr key={item.id} className="border-t  border-foreground/10">
+                <td className="py-2 ">
+                  <Input
+                    value={item.name}
+                    onChange={(e) => updateItem(item.id, 'name', e.target.value)}
+                    placeholder="Item name"
+                    className="w-72 p-2 border border-foreground bg-input"
+                  />
+                </td>
+                <td className="py-2">
+                  <Input
+                    type="number"
+                    value={item.score}
+                    onChange={(e) => updateItem(item.id, 'score', e.target.value)}
+                    placeholder="Score"
+                    min="0"
+                    max="100"
+                    className="w-24 p-2 border border-foreground bg-input"
+                  />
+                </td>
+                <td className="py-2">
+                  <Input
+                    type="number"
+                    value={item.weight}
+                    onChange={(e) => updateItem(item.id, 'weight', e.target.value)}
+                    placeholder="Weight"
+                    min="0"
+                    step="0.1"
+                    className="w-16 p-2 border border-foreground bg-input"
+                  />
+                </td>
+                <td className="py-2">
+                  <Button
+                    onClick={() => removeItem(item.id)}
+                    variant="destructive"
+                    size="sm"
+                    type="button"
+                    className="px-2 py-1 text-destructive-foreground"
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* MOBILE CARDS */}
+      <div className="sm:hidden flex flex-col gap-3 mb-4">
         {category.items.map(item => (
-          <GradeItemInput
+          <div
             key={item.id}
-            item={item}
-            onUpdate={updateItem}
-            onRemove={removeItem}
-          />
+            className="border border-foreground/20 p-3 rounded-lg bg-card"
+          >
+            <div className="flex flex-col gap-2">
+              <Input
+                value={item.name}
+                placeholder="Item name"
+                className="w-full p-2 border border-foreground/60 bg-input"
+                onChange={(e) => updateItem(item.id, 'name', e.target.value)}
+              />
+              <Input
+                type="number"
+                value={item.score}
+                placeholder="Score %"
+                className="w-full p-2 border border-foreground/60 bg-input"
+                onChange={(e) => updateItem(item.id, 'score', e.target.value)}
+              />
+              <Input
+                type="number"
+                value={item.weight}
+                placeholder="Weight"
+                className="w-full p-2 border border-foreground/60 bg-input"
+                onChange={(e) => updateItem(item.id, 'weight', e.target.value)}
+              />
+              <Button
+                onClick={() => removeItem(item.id)}
+                variant="destructive"
+                size="sm"
+                type="button"
+                className="w-full px-3 py-2 text-destructive-foreground"
+              >
+                Remove
+              </Button>
+            </div>
+          </div>
         ))}
       </div>
-      
-      <div className="flex flex-col sm:flex-row justify-between items-center mt-4">
-        <Button
-          size={'sm'}
-          onClick={addItem}
-          className="text-accent-foreground bg-accent hover:bg-accent-foreground hover:text-accent w-full sm:w-36 text-sm font-semibold"
-        >
-          + Add Assignment
-        </Button>
-        <Button
-          size={'sm'}
-          onClick={() => onRemoveCategory(category.id)}
-          className="mt-2 sm:mt-0 text-primary-foreground px-3 py-1 rounded-md w-full sm:w-36 text-sm"
-        >
-          Remove Category
-        </Button>
+
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
+        <div className="text-sm text-foreground/70">
+          Category Score: <span className="font-bold text-primary">{categoryScore.toFixed(2)}%</span>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          <Button
+            size='sm'
+            onClick={addItem}
+            variant='outline'
+            type="button"
+            className="w-full sm:w-36 text-sm"
+          >
+            + Add Assignment
+          </Button>
+          <Button
+            size='sm'
+            variant='destructive'
+            type="button"
+            onClick={() => onRemoveCategory(category.id)}
+            className="w-full sm:w-36 text-sm"
+          >
+            Remove Category
+          </Button>
+        </div>
       </div>
     </div>
   );
+};
+
+// GPA conversion functions (similar to GPA.tsx)
+const percentToGpa = (p: number) => {
+  if (p >= 95) return 4.0;
+  if (p >= 90) return 3.67;
+  if (p >= 85) return 3.33;
+  if (p >= 80) return 3.0;
+  if (p >= 75) return 2.67;
+  if (p >= 70) return 2.33;
+  if (p >= 65) return 2.0;
+  if (p >= 60) return 1.67;
+  if (p >= 55) return 1.33;
+  if (p >= 50) return 1.0;
+  if (p >= 25) return 0;
+  return 0;
+};
+
+const gpaToLetter = (g: number) => {
+  if (g >= 4.0) return "A";
+  if (g >= 3.67) return "A-";
+  if (g >= 3.33) return "B+";
+  if (g >= 3.0) return "B";
+  if (g >= 2.67) return "B-";
+  if (g >= 2.33) return "C+";
+  if (g >= 2.0) return "C";
+  if (g >= 1.67) return "C-";
+  if (g >= 1.33) return "D+";
+  if (g >= 1.0) return "D";
+  if (g > 0) return "FX";
+  return "F";
+};
+
+const letterColor = (letter: string) => {
+  switch (letter) {
+    case "A":
+    case "A-":
+      return "text-green-500 font-bold";
+    case "B+":
+    case "B":
+    case "B-":
+      return "text-lime-700 font-bold";
+    case "C+":
+    case "C":
+    case "C-":
+      return "text-yellow-500 font-bold";
+    case "D+":
+    case "D":
+      return "text-orange-500 font-bold";
+    case "FX":
+    case "F":
+      return "text-red-500 font-bold";
+    default:
+      return "";
+  }
 };
 
 // --- MAIN DYNAMIC CALCULATOR COMPONENT ---
@@ -204,7 +333,7 @@ export default function DynamicGradeCalculator() {
   ]);
 
   // --- STATE FOR CALCULATED RESULTS ---
-  const [categoryScores, setCategoryScores] = useState<{[key: string]: number}>({});
+  const [categoryScores, setCategoryScores] = useState<{ [key: string]: number }>({});
   const [finalGrade, setFinalGrade] = useState(0);
 
   // --- CALCULATION LOGIC ---
@@ -212,7 +341,7 @@ export default function DynamicGradeCalculator() {
     const p = (val: string) => parseFloat(val) || 0;
 
     // Calculate score for each category
-    const newCategoryScores: {[key: string]: number} = {};
+    const newCategoryScores: { [key: string]: number } = {};
 
     categories.forEach(category => {
       let totalWeightedScore = 0;
@@ -228,9 +357,9 @@ export default function DynamicGradeCalculator() {
       });
 
       // Calculate category score as percentage
-      const categoryScore = totalCategoryWeight > 0 ? 
+      const categoryScore = totalCategoryWeight > 0 ?
         (totalWeightedScore / totalCategoryWeight) * 100 : 0;
-      
+
       newCategoryScores[category.id] = categoryScore;
     });
 
@@ -251,11 +380,11 @@ export default function DynamicGradeCalculator() {
     const newCategory: Category = {
       id: crypto.randomUUID(),
       name: `New Category ${categories.length + 1}`,
-      items: [{ 
-        id: crypto.randomUUID(), 
-        name: 'Assignment 1', 
-        score: '', 
-        weight: '100' 
+      items: [{
+        id: crypto.randomUUID(),
+        name: 'Assignment 1',
+        score: '',
+        weight: '100'
       }],
       totalWeight: 0
     };
@@ -263,7 +392,7 @@ export default function DynamicGradeCalculator() {
   };
 
   const updateCategory = (id: string, updatedCategory: Category) => {
-    setCategories(categories.map(cat => 
+    setCategories(categories.map(cat =>
       cat.id === id ? updatedCategory : cat
     ));
   };
@@ -279,75 +408,84 @@ export default function DynamicGradeCalculator() {
     (sum, category) => sum + category.totalWeight, 0
   );
 
+  const finalGpa = percentToGpa(finalGrade);
+
   return (
-    <div className='px-4 pt-4 sm:px-8 sm:pt-8'>
-      {/* --- RESULTS DISPLAY --- */}
-      <div className="bg-card rounded-xl p-6 mb-8 shadow-lg border border-foreground">
-        <h2 className="text-lg font-medium text-foreground text-center">
-          Your Calculated Final Grade
-        </h2>
-        <p className="text-5xl font-bold text-center text-primary mt-2">
-          {finalGrade.toFixed(2)}%
-        </p>
-        
-        {/* Weight Summary */}
-        <div className="mt-4 text-center">
-          <p className="text-foreground">
-            Total Weight: {totalWeightPercentage}%
-            {totalWeightPercentage !== 100 && (
-              <span className="text-destructive ml-2"><br />
-                (Should be 100% - currently {totalWeightPercentage > 100 ? 'over' : 'under'})
-              </span>
-            )}
-          </p>
+    <div className="px-4 pt-4 md:px-8 md:pt-8 max-w-4xl mx-auto w-full">
+      <div className="bg-card rounded-lg p-4 md:p-6 border border-foreground">
+        <div className='sm:flex items-center justify-between'>
+          <h3 className="text-xl font-bold text-foreground mb-4">
+            Dynamic Grade Calculator
+          </h3>
+
+          {/* BUTTONS */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
+            <Button
+              onClick={addCategory}
+              variant="default"
+              size="sm"
+              type="button"
+              className="px-4 py-2 bg-primary text-secondary font-medium w-full sm:w-auto"
+            >
+              + Add Category
+            </Button>
+          </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-4 text-center">
+        {/* CATEGORIES */}
+        <div className="space-y-4">
           {categories.map(category => (
-            <div key={category.id}>
-              <p className="text-foreground text-sm sm:text-base">{category.name}</p>
-              <p className="text-lg md:text-2xl font-semibold text-accent-foreground">
+            <GradeCategory
+              key={category.id}
+              category={category}
+              onUpdateCategory={updateCategory}
+              onRemoveCategory={removeCategory}
+            />
+          ))}
+        </div>
+
+        {/* STATS - Matching GPA layout */}
+        <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div className="p-3 rounded-md border bg-card">
+            <div className="text-sm text-foreground">Final Grade</div>
+            <div className="text-2xl font-bold text-primary">
+              {finalGrade.toFixed(1)}%
+            </div>
+          </div>
+
+          <div className="p-3 rounded-md border bg-card">
+            <div className="text-sm text-foreground">Final GPA</div>
+            <div className="text-2xl font-bold text-primary">
+              {finalGpa.toFixed(2)}{" "}
+              <span className={letterColor(gpaToLetter(finalGpa))}>
+                {gpaToLetter(finalGpa)}
+              </span>
+            </div>
+          </div>
+
+          <div className="p-3 rounded-md border bg-card">
+            <div className="text-sm text-foreground">Total Weight</div>
+            <div className="text-2xl font-bold">
+              {totalWeightPercentage}%
+              {totalWeightPercentage !== 100 && (
+                <span className="text-sm text-red-500 block">
+                  (Should be 100%)
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Category Scores */}
+          {categories.map(category => (
+            <div key={category.id} className="p-3 rounded-md border bg-card">
+              <p className="text-sm text-foreground">{category.name}</p>
+              <p className="text-xl font-semibold text-accent-foreground">
                 {categoryScores[category.id]?.toFixed(2) || '0.00'}%
               </p>
-              <p className="text-sm text-muted-foreground">{category.totalWeight}% of final</p>
+              <p className="text-xs text-foreground/70">{category.totalWeight}% weight</p>
             </div>
           ))}
         </div>
-      </div>
-
-      {/* --- CATEGORY MANAGEMENT --- */}
-      <div className="mb-6 flex justify-between items-center">
-        <h2 className="title-text2 text-2xl font-bold text-foreground">Course Categories</h2>
-        <Button
-          onClick={addCategory}
-          className="bg-primary text-primary-foreground px-4 py-2 rounded-md transition-colors"
-        >
-          + Add Category
-        </Button>
-      </div>
-
-      {/* --- GRADE INPUTS --- */}
-      <div className="grid grid-cols-1 gap-8">
-        {categories.map(category => (
-          <GradeCategory
-            key={category.id}
-            category={category}
-            onUpdateCategory={updateCategory}
-            onRemoveCategory={removeCategory}
-          />
-        ))}
-      </div>
-
-      {/* Instructions */}
-      <div className="mt-8 p-4 bg-card rounded-lg border border-foreground">
-        <h3 className="font-bold text-foreground text-sm sm:text-base mb-2">How to use:</h3>
-        <ul className="list-disc list-inside text-sm sm:text-base text-foreground space-y-1">
-          <li>Add/remove categories for different parts of your course (Mid Term, Quizzes, Projects, etc.)</li>
-          <li>Set the category weight as percentage of final grade</li>
-          <li>Add assignments within each category with their individual weights</li>
-          <li>Enter your scores as percentages (0-100%)</li>
-          <li>Ensure total category weights sum to 100% for accurate calculation</li>
-        </ul>
       </div>
     </div>
   );

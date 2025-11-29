@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
 export type SubjectRow = {
   id: number;
@@ -20,13 +22,13 @@ export default function GpaCalculator() {
     setRows((prev) => prev.map((r) => (r.id === id ? { ...r, ...patch } : r)));
   };
 
-  const addRow = () => {
+  const addRow = useCallback(() => {
     setRows((prev) => [
       ...prev,
       { id: nextId, name: `Subject ${nextId}`, percent: "", credits: 5 },
     ]);
     setNextId((id) => id + 1);
-  };
+  }, [nextId]);
 
   const removeRow = (id: number) => {
     setRows((prev) => prev.filter((r) => r.id !== id));
@@ -119,35 +121,43 @@ export default function GpaCalculator() {
 
   useEffect(() => {
     if (rows.length === 0) addRow();
-  }, [rows.length]);
+  }, [addRow, rows.length]);
 
   return (
-    <div className="px-4 pt-4 md:px-10 md:pt-8 max-w-5xl mx-auto w-full">
-      <div className="bg-card rounded-xl p-4 md:p-6 shadow-lg border border-foreground">
+    <div className="px-4 pt-4 md:px-8 md:pt-8 max-w-4xl mx-auto w-full">
+      <div className="bg-card rounded-lg p-4 md:p-6 border border-foreground">
         <h3 className="text-xl font-bold text-foreground mb-4">
           GPA Calculator
         </h3>
 
         {/* BUTTONS */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
-          <button
+          <Button
             onClick={addRow}
-            className="px-4 py-2 rounded-md bg-primary text-white font-medium w-full sm:w-auto"
+            variant="default"
+            size="sm"
+            type="button"
+            disabled={rows.length >= 10}
+            className="px-4 py-2 bg-primary text-secondary font-medium w-full sm:w-auto"
           >
             + Add subject
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={reset}
-            className="px-4 py-2 rounded-md border border-foreground text-foreground w-full sm:w-auto"
+            variant="outline"
+            size="sm"
+            type="button"
+            disabled={rows.length === 0}
+            className="px-4 py-2 text-foreground w-full sm:w-auto"
           >
             Reset
-          </button>
+          </Button>
         </div>
 
         {/* DESKTOP TABLE */}
         <div className="hidden sm:block overflow-x-auto">
-          <table className="w-full table-auto text-sm">
-            <thead>
+          <table className="w-full table-auto border-collapse text-sm md:text-base">
+            <thead className="">
               <tr className="text-left text-foreground/80">
                 <th className="py-2">#</th>
                 <th className="py-2">Subject name</th>
@@ -157,28 +167,29 @@ export default function GpaCalculator() {
                 <th className="py-2">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="">
               {rows.map((r, idx) => {
                 const g = percentToGpa(Number(r.percent) || 0);
                 return (
                   <tr key={r.id} className="border-t border-foreground/10">
                     <td className="py-2 pr-4">{idx + 1}</td>
                     <td className="py-2">
-                      <input
+                      <Input
                         value={r.name}
-                        className="w-40 p-2 rounded-md border bg-input"
+                        className="w-40 p-2 border border-foreground bg-input"
                         onChange={(e) =>
                           updateRow(r.id, { name: e.target.value })
                         }
                       />
                     </td>
                     <td className="py-2">
-                      <input
+                      <Input
                         type="number"
                         min={0}
                         max={100}
                         value={r.percent}
-                        className="w-24 p-2 rounded-md border bg-input"
+                        placeholder="67"
+                        className="w-24 p-2 border border-foreground bg-input"
                         onChange={(e) =>
                           updateRow(r.id, {
                             percent:
@@ -190,11 +201,11 @@ export default function GpaCalculator() {
                       />
                     </td>
                     <td className="py-2">
-                      <input
+                      <Input
                         type="number"
                         min={0}
                         value={r.credits}
-                        className="w-20 p-2 rounded-md border bg-input"
+                        className="w-20 p-2 border border-foreground bg-input"
                         onChange={(e) =>
                           updateRow(r.id, {
                             credits:
@@ -207,12 +218,16 @@ export default function GpaCalculator() {
                     </td>
                     <td className="py-2">{g.toFixed(2)}</td>
                     <td className="py-2">
-                      <button
+                      <Button
                         onClick={() => removeRow(r.id)}
-                        className="px-2 py-1 rounded-md bg-red-500 text-white"
+                        variant="destructive"
+                        size="sm"
+                        disabled={rows.length === 1}
+                        type="button"
+                        className="px-2 py-1 text-destructive-foreground"
                       >
                         Remove
-                      </button>
+                      </Button>
                     </td>
                   </tr>
                 );
@@ -235,18 +250,18 @@ export default function GpaCalculator() {
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  <input
+                  <Input
                     value={r.name}
                     placeholder="Subject..."
-                    className="w-full p-2 rounded-md border bg-input"
+                    className="w-full p-2 border border-foreground/60 bg-input"
                     onChange={(e) => updateRow(r.id, { name: e.target.value })}
                   />
 
-                  <input
+                  <Input
                     type="number"
                     value={r.percent}
-                    placeholder="Percent (0–100)"
-                    className="w-full p-2 rounded-md border bg-input"
+                    placeholder="Percent... 67%"
+                    className="w-full p-2 border border-foreground/60 bg-input"
                     onChange={(e) =>
                       updateRow(r.id, {
                         percent:
@@ -255,11 +270,11 @@ export default function GpaCalculator() {
                     }
                   />
 
-                  <input
+                  <Input
                     type="number"
                     value={r.credits}
                     placeholder="Credits"
-                    className="w-full p-2 rounded-md border bg-input"
+                    className="w-full p-2 border border-foreground/60 bg-input"
                     onChange={(e) =>
                       updateRow(r.id, {
                         credits:
@@ -272,12 +287,16 @@ export default function GpaCalculator() {
                     GPA: {g.toFixed(2)}
                   </div>
 
-                  <button
+                  <Button
                     onClick={() => removeRow(r.id)}
-                    className="w-full px-3 py-2 rounded-md bg-red-500 text-white"
+                    variant="destructive"
+                    size="sm"
+                    disabled={rows.length === 1}
+                    type="button"
+                    className="w-full px-3 py-2 text-secondary"
                   >
                     Remove
-                  </button>
+                  </Button>
                 </div>
               </div>
             );

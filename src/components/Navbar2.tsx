@@ -356,7 +356,7 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
                       <Button
                         size={"sm"}
                         onClick={() => onSelectSubject?.(subject)}
-                        className={`hover:rounded-xl transition-all  md:text-sm text-xs font-semibold ${
+                        className={`transition-all  md:text-sm text-xs font-semibold ${
                           selectedSubject === subject 
                             ? 'bg-accent-foreground border-0 text-secondary' 
                             : 'bg-accent text-accent-foreground hover:bg-accent-foreground hover:text-secondary'
